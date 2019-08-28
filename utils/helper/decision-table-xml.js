@@ -100,18 +100,20 @@ function parseDecisions(drgElements) {
   const parsedDecisions = [];
   // iterate over all decisions in the DMN
   drgElements.forEach((drgElement) => {
-    // parse the decision table...
-    const decision = { decisionTable: parseDecisionTable(drgElement.id, drgElement.decisionTable), requiredDecisions: [] };
-    // ...and collect the decisions on which the current decision depends
-    if (drgElement.informationRequirement !== undefined) {
-      drgElement.informationRequirement.forEach((req) => {
-        if (req.requiredDecision !== undefined) {
-          const requiredDecisionId = req.requiredDecision.href.replace('#', '');
-          decision.requiredDecisions.push(requiredDecisionId);
-        }
-      });
+    if (drgElement.decisionTable) {
+      // parse the decision table...
+      const decision = { decisionTable: parseDecisionTable(drgElement.id, drgElement.decisionTable), requiredDecisions: [] };
+      // ...and collect the decisions on which the current decision depends
+      if (drgElement.informationRequirement !== undefined) {
+        drgElement.informationRequirement.forEach((req) => {
+          if (req.requiredDecision !== undefined) {
+            const requiredDecisionId = req.requiredDecision.href.replace('#', '');
+            decision.requiredDecisions.push(requiredDecisionId);
+          }
+        });
+      }
+      parsedDecisions[drgElement.id] = decision;
     }
-    parsedDecisions[drgElement.id] = decision;
   });
   return parsedDecisions;
 }
