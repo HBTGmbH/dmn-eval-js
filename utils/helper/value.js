@@ -53,12 +53,14 @@ const valueInverseDT = (value, offset = 'Z') => {
   return dateAndTime(e.add(value, 'seconds').utcOffset(offset).format());
 };
 
-const valueDTD = obj => obj.asSeconds();
+const valueDTD = (obj) => obj.asSeconds();
 
-const valueInverseDTD = value => duration(`PT${Math.floor(value)}S`);
+const valueInverseDTD = (value) => duration(`PT${Math.floor(value)}S`);
 
-const valueYMD = obj => obj.asMonths();
+const valueYMD = (obj) => obj.asMonths();
 
-const valueInverseYMD = value => duration(`P${Math.floor(value)}M`);
+const valueInverseYMD = (value) => duration(`P${Math.floor(value)}M`);
 
-module.exports = { valueT, valueInverseT, valueDT, valueInverseDT, valueDTD, valueInverseDTD, valueYMD, valueInverseYMD };
+module.exports = {
+  valueT, valueInverseT, valueDT, valueInverseDT, valueDTD, valueInverseDTD, valueYMD, valueInverseYMD,
+};

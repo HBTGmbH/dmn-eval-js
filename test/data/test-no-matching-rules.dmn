@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decisionUnique" name="Unique">
-    <extensionElements>
-      <biodi:bounds x="200" y="200" width="180" height="80" />
-    </extensionElements>
     <decisionTable id="decisionTable" hitPolicy="FIRST">
       <input id="input1" label="Input 1" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="integer">        <text>input1</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="integer">
+          <text>input1</text>
+        </inputExpression>
       </input>
       <input id="InputClause_0x9t74d" label="Input 2" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_1xqnf9t" typeRef="integer">        <text>input2</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_1xqnf9t" typeRef="integer">
+          <text>input2</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Output 1" name="output1" typeRef="integer" />
       <output id="OutputClause_1gheok5" label="Nested Output 1" name="output1.nested" typeRef="string" />
@@ -19,21 +18,30 @@
     </decisionTable>
   </decision>
   <decision id="decisionCollect" name="Collect">
-    <extensionElements>
-      <biodi:bounds x="454" y="202" width="180" height="80" />
-    </extensionElements>
     <decisionTable id="DecisionTable_0cv7ee8" hitPolicy="COLLECT">
       <input id="InputClause_0wmx9nf" label="Input 1" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_0iwz57q" typeRef="integer">        <text>input1</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_0iwz57q" typeRef="integer">
+          <text>input1</text>
+        </inputExpression>
       </input>
       <input id="InputClause_07ujjkt" label="Input 2" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_0wwhdth" typeRef="integer">        <text>input2</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_0wwhdth" typeRef="integer">
+          <text>input2</text>
+        </inputExpression>
       </input>
       <output id="OutputClause_0cxgzjj" label="Output 1" name="output1" typeRef="integer" />
       <output id="OutputClause_10wkfgy" label="Nested Output 1" name="output1.nested" typeRef="string" />
       <output id="OutputClause_1jfvvdu" label="Output 2" name="output2" typeRef="string" />
     </decisionTable>
   </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_0csthb8">
+      <dmndi:DMNShape id="DMNShape_0tvhps1" dmnElementRef="decisionUnique">
+        <dc:Bounds height="80" width="180" x="200" y="200" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0ydudx6" dmnElementRef="decisionCollect">
+        <dc:Bounds height="80" width="180" x="454" y="202" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
 </definitions>

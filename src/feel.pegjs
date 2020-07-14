@@ -1,20 +1,10 @@
-{
+{ 
 /*
  *
  *  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
  *  Bangalore, India. All Rights Reserved.
  *
  */
-// differences to DMN 1.1 S-FEEL:
-// - endpoint can also be arithmetic expression
-// - simple value can also be function invocation
-// - simple literal can also be a null literal
-// - date time literal can also be "date and time"
-// - brackets in arithmetic expressions are supported
-// - no additional name symbols
-// known issues:
-// - operator precedence in arithmetic expressions is not properly interpreted (for example in a + b / c - d)
-
 // initializer section start
 
 // ast nodes are the constructors used to construct the ast for the parsed grammar

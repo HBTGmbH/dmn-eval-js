@@ -1,118 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decisionPrimary" name="Primary decision">
-    <extensionElements>
-      <biodi:bounds x="200" y="200" width="180" height="80" />
-      <biodi:edge source="decisionDependent">
-        <biodi:waypoints x="297" y="368" />
-        <biodi:waypoints x="321" y="280" />
-      </biodi:edge>
-    </extensionElements>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_00u2fc8">
       <requiredDecision href="#decisionDependent" />
     </informationRequirement>
     <decisionTable id="decisionTable" hitPolicy="FIRST">
       <input id="input1" label="Required 1" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="integer">        <text>output1.length</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="integer">
+          <text>output1.length</text>
+        </inputExpression>
       </input>
       <input id="InputClause_0x9t74d" label="Required 2" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_1xqnf9t" typeRef="integer">        <text>output2.nested.length</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_1xqnf9t" typeRef="integer">
+          <text>output2.nested.length</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Score" name="output.score" typeRef="integer" />
       <rule id="row-503089363-5">
         <description></description>
-        <inputEntry id="UnaryTests_0d1r8xq">        <text><![CDATA[< 2]]></text>
-</inputEntry>
-        <inputEntry id="UnaryTests_1l7ydm8">        <text><![CDATA[< 2]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1468hty">        <text>100</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0d1r8xq">
+          <text>&lt; 2</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1l7ydm8">
+          <text>&lt; 2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1468hty">
+          <text>100</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-6">
         <description></description>
-        <inputEntry id="UnaryTests_0rwjaql">        <text>2</text>
-</inputEntry>
-        <inputEntry id="UnaryTests_01ubwtp">        <text>2</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1vs5wi6">        <text>75</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0rwjaql">
+          <text>2</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01ubwtp">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1vs5wi6">
+          <text>75</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-7">
         <description></description>
-        <inputEntry id="UnaryTests_12akixl">        <text>3</text>
-</inputEntry>
-        <inputEntry id="UnaryTests_1tpo78s">        <text>2</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_06kgyln">        <text>50</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_12akixl">
+          <text>3</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1tpo78s">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06kgyln">
+          <text>50</text>
+        </outputEntry>
       </rule>
       <rule id="row-399193-1">
         <description></description>
-        <inputEntry id="UnaryTests_160j0q2">        <text>3</text>
-</inputEntry>
-        <inputEntry id="UnaryTests_0xuvlsu">        <text>3</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1fn75z0">        <text>25</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_160j0q2">
+          <text>3</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xuvlsu">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1fn75z0">
+          <text>25</text>
+        </outputEntry>
       </rule>
       <rule id="row-399193-2">
-        <inputEntry id="UnaryTests_04ag78f">        <text></text>
-</inputEntry>
-        <inputEntry id="UnaryTests_02s8qdp">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0m6k345">        <text>0</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_04ag78f">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02s8qdp">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0m6k345">
+          <text>0</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>
   <decision id="decisionDependent" name="Dependent decision">
-    <extensionElements>
-      <biodi:bounds x="196" y="368" width="180" height="80" />
-    </extensionElements>
     <decisionTable id="DecisionTable_0cv7ee8" hitPolicy="COLLECT">
       <input id="InputClause_0wmx9nf" label="Category" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_0iwz57q" typeRef="string">        <text>input.category</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_0iwz57q" typeRef="string">
+          <text>input.category</text>
+        </inputExpression>
       </input>
       <output id="OutputClause_0cxgzjj" label="Output 1" name="output1" typeRef="string" />
       <output id="OutputClause_10wkfgy" label="Output 2" name="output2.nested" typeRef="string" />
       <rule id="row-503089363-1">
         <description></description>
-        <inputEntry id="UnaryTests_0rt9g4i">        <text><![CDATA["A", "B"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1ynxoo9">        <text><![CDATA["Value 1"]]></text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0pdkdse">        <text><![CDATA["Nested value 1"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0rt9g4i">
+          <text>"A", "B"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ynxoo9">
+          <text>"Value 1"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0pdkdse">
+          <text>"Nested value 1"</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-2">
         <description></description>
-        <inputEntry id="UnaryTests_08ybgpx">        <text><![CDATA["C"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0qf7g0r">        <text><![CDATA["Value 2"]]></text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_1002v8u">        <text><![CDATA["Nested value 2"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_08ybgpx">
+          <text>"C"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qf7g0r">
+          <text>"Value 2"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1002v8u">
+          <text>"Nested value 2"</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-3">
         <description></description>
-        <inputEntry id="UnaryTests_06zj57i">        <text><![CDATA[not("C", "D")]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0ygzepj">        <text><![CDATA["Value 3"]]></text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0n0wj3y">        <text></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_06zj57i">
+          <text>not("C", "D")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ygzepj">
+          <text>"Value 3"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0n0wj3y">
+          <text></text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-4">
-        <inputEntry id="UnaryTests_1w1dgo0">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1w58vcr">        <text><![CDATA["Value 4"]]></text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0wzpjef">        <text><![CDATA["Nested value 4"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_1w1dgo0">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1w58vcr">
+          <text>"Value 4"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0wzpjef">
+          <text>"Nested value 4"</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1eialix">
+      <dmndi:DMNShape id="DMNShape_1uqv12z" dmnElementRef="decisionPrimary">
+        <dc:Bounds height="80" width="180" x="200" y="200" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1x9j5t8" dmnElementRef="InformationRequirement_00u2fc8">
+        <di:waypoint x="297" y="368" />
+        <di:waypoint x="321" y="280" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0omyhkd" dmnElementRef="decisionDependent">
+        <dc:Bounds height="80" width="180" x="196" y="368" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
 </definitions>

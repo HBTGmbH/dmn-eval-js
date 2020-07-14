@@ -2,7 +2,7 @@
 
 # About
 
-dmn-eval-js is a Javascript rule engine to execute decision tables according to the [DMN](http://www.omg.org/spec/DMN/1.1/) standard.
+dmn-eval-js is a Javascript rule engine to execute decision tables according to the [DMN](http://www.omg.org/spec/DMN/1.3/) standard.
 This implementation is based on [FEEL by EdgeVerve](https://github.com/EdgeVerve/feel). It is tailored to evaluation of
 simple expression language (S-FEEL), plus some cherry-picked parts of FEEL.
 
@@ -143,7 +143,7 @@ Function implementation should be free of side-effects. Date and time instances 
 
 #### Built-in functions
 
-dmn-eval-js supports the following built-in functions from DMN 1.1:
+dmn-eval-js supports the following built-in functions from DMN 1.3:
 - string functions: ```starts with, ends with, contains, upper case, lower case```
 - boolean functions: ```not```
 - list functions: ```list contains, count, min, max, sum, mean, and, or, append, concatenate, insert before, remove, reverse, index of, union, distinct values, flatten```
@@ -345,4 +345,4 @@ npm run lintfix
 
 For comprehensive set of documentation on DMN, you can refer to :
 
-[DMN Specification Document](http://www.omg.org/spec/DMN/1.1/)
+[DMN Specification Document](http://www.omg.org/spec/DMN/1.3/)

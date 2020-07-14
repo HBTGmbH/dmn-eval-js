@@ -5,3 +5,4 @@ gulpfile.js
 /_archive/*
 /utils/dev/*
 dummy.js
+node_modules

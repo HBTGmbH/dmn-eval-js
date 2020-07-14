@@ -5,7 +5,6 @@
 *
 */
 
-
 const ast = {};
 
 /* Begin AST Node Constructors */

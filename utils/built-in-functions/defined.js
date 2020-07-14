@@ -3,6 +3,6 @@
 *  All Rights Reserved.
 */
 
-const defined = y => y !== null && y !== undefined;
+const defined = (y) => y !== null && y !== undefined;
 
 module.exports = { defined };

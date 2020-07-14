@@ -5,20 +5,19 @@
  *
  */
 
-
 const _ = require('lodash');
+const logger = require('loglevel').getLogger('dmn-eval-js');
 const fnGen = require('../utils/helper/fn-generator');
 const addKwargs = require('../utils/helper/add-kwargs');
 const builtInFns = require('../utils/built-in-functions');
 const resolveName = require('../utils/helper/name-resolution.js');
-const logger = require('loglevel').getLogger('dmn-eval-js');
 
 module.exports = function (ast) {
   ast.ProgramNode.prototype.build = function (data = {}, env = {}, type = 'output') {
     let args = {};
     if (!data.isContextBuilt) {
-      const context = Object.assign({}, data, builtInFns);
-      args = Object.assign({}, { context }, env);
+      const context = { ...data, ...builtInFns };
+      args = { context, ...env };
       args.isContextBuilt = true;
     } else {
       args = data;
@@ -68,15 +67,14 @@ module.exports = function (ast) {
     if (args.context._inputVariableName && this.operand.type === 'FunctionInvocation' && this.operand.params) {
       // patch only if there is an input variable and the simple positive unary test contains a function directly,
       // where the input variable in a parameter of that function
-      const nodeIsQualifiedNameOfInputVariable = node =>
-        node.type === 'QualifiedName' && node.names.map(nameNode => nameNode.nameChars).join('.') === args.context._inputVariableName;
-      const inputVariableParameter = (this.operand.params.params || []).find(node => nodeIsQualifiedNameOfInputVariable(node));
+      const nodeIsQualifiedNameOfInputVariable = (node) => node.type === 'QualifiedName' && node.names.map((nameNode) => nameNode.nameChars).join('.') === args.context._inputVariableName;
+      const inputVariableParameter = (this.operand.params.params || []).find((node) => nodeIsQualifiedNameOfInputVariable(node));
       if (inputVariableParameter) {
         if (result === true) {
           // if the function evaluates to true, compare the evaluated input expression with the evaluated input variable,
           // not with the result of the function evaluation
           return fnGen(this.operator || '==')(_, inputVariableParameter.build(args));
-        } else if (result === false) {
+        } if (result === false) {
           // if the function evaluates to false, the simple positive unary test should always evaluate to false
           return () => false;
         }
@@ -87,18 +85,18 @@ module.exports = function (ast) {
   };
 
   ast.SimpleUnaryTestsNode.prototype.build = function (data = {}) {
-    const context = Object.assign({}, data, builtInFns);
+    const context = { ...data, ...builtInFns };
     const args = { context };
     if (this.expr) {
-      const results = this.expr.map(d => d.build(args));
+      const results = this.expr.map((d) => d.build(args));
       if (this.not) {
-        const negResults = results.map(result => args.context.not(result));
-        return x => negResults.reduce((result, next) => {
+        const negResults = results.map((result) => args.context.not(result));
+        return (x) => negResults.reduce((result, next) => {
           const nextValue = next(x);
           return (result === false || nextValue === false) ? false : ((result === undefined || nextValue === undefined) ? undefined : (result && nextValue));
         }, true);
       }
-      return x => results.reduce((result, next) => {
+      return (x) => results.reduce((result, next) => {
         const nextValue = next(x);
         return (result === true || nextValue === true) ? true : ((result === undefined || nextValue === undefined) ? undefined : (result || nextValue));
       }, false);
@@ -151,12 +149,12 @@ module.exports = function (ast) {
   ast.SimpleExpressionsNode.prototype.build = function (data = {}, env = {}) {
     let context = {};
     if (!data.isBuiltInFn) {
-      context = Object.assign({}, data, builtInFns, { isBuiltInFn: true });
+      context = { ...data, ...builtInFns, isBuiltInFn: true };
     } else {
       context = data;
     }
-    const args = Object.assign({}, { context }, env);
-    return this.simpleExpressions.map(d => d.build(args));
+    const args = { context, ...env };
+    return this.simpleExpressions.map((d) => d.build(args));
   };
 
   // _fetch is used to return the name string or
@@ -176,7 +174,7 @@ module.exports = function (ast) {
 
   ast.DateTimeLiteralNode.prototype.build = function (args) {
     const fn = args.context[this.symbol];
-    const paramsResult = this.params.map(d => d.build(args));
+    const paramsResult = this.params.map((d) => d.build(args));
     let result;
     if (!paramsResult.includes(undefined)) {
       result = fn(...paramsResult);
@@ -194,7 +192,7 @@ module.exports = function (ast) {
         const kwParams = values.reduce((recur, next, i) => {
           const obj = {};
           obj[formalParams[i]] = next;
-          return Object.assign({}, recur, obj);
+          return { ...recur, ...obj };
         }, {});
         return addKwargs(args, kwParams);
       }
@@ -202,7 +200,7 @@ module.exports = function (ast) {
     };
 
     const processUserDefinedFunction = (fnMeta) => {
-      const fn = fnMeta.fn;
+      const { fn } = fnMeta;
       const formalParams = fnMeta.params;
 
       if (formalParams) {
@@ -217,11 +215,11 @@ module.exports = function (ast) {
       if (Array.isArray(values)) {
         return fnMeta(...[...values, args.context]);
       }
-      return fnMeta(Object.assign({}, args.context, args.kwargs), values);
+      return fnMeta({ ...args.context, ...args.kwargs }, values);
     };
 
     const processDecision = (fnMeta) => {
-      const expr = fnMeta.expr;
+      const { expr } = fnMeta;
       if (expr.body instanceof ast.FunctionDefinitionNode) {
         const exprResult = expr.body.build(args);
         return processUserDefinedFunction(exprResult);
@@ -233,7 +231,7 @@ module.exports = function (ast) {
     const processFnMeta = (fnMeta) => {
       if (typeof fnMeta === 'function') {
         return processInBuiltFunction(fnMeta);
-      } else if (typeof fnMeta === 'object' && fnMeta.isDecision) {
+      } if (typeof fnMeta === 'object' && fnMeta.isDecision) {
         return processDecision(fnMeta);
       }
       return processUserDefinedFunction(fnMeta);
@@ -248,27 +246,27 @@ module.exports = function (ast) {
   };
 
   ast.PositionalParametersNode.prototype.build = function (args, doNotWarnIfUndefined = false) {
-    const results = this.params.map(d => d.build(args, doNotWarnIfUndefined));
+    const results = this.params.map((d) => d.build(args, doNotWarnIfUndefined));
     return results;
   };
 
   ast.ComparisonExpressionNode.prototype.build = function (args) {
-    let operator = this.operator;
+    let { operator } = this;
     if (operator === 'between') {
-      const results = [this.expr_1, this.expr_2, this.expr_3].map(d => d.build(args));
+      const results = [this.expr_1, this.expr_2, this.expr_3].map((d) => d.build(args));
       if ((results[0] >= results[1]) && (results[0] <= results[2])) {
         return true;
       }
       return false;
-    } else if (operator === 'in') {
+    } if (operator === 'in') {
       const processExpr = (operand) => {
         this.expr_2 = Array.isArray(this.expr_2) ? this.expr_2 : [this.expr_2];
-        const tests = this.expr_2.map(d => d.build(args));
-        return tests.map(test => test(operand)).reduce((accu, next) => accu || next, false);
+        const tests = this.expr_2.map((d) => d.build(args));
+        return tests.map((test) => test(operand)).reduce((accu, next) => accu || next, false);
       };
       return processExpr(this.expr_1.build(args));
     }
-    const results = [this.expr_1, this.expr_2].map(d => d.build(args));
+    const results = [this.expr_1, this.expr_2].map((d) => d.build(args));
     operator = operator !== '=' ? operator : '==';
     return fnGen(operator)(results[0])(results[1]);
   };

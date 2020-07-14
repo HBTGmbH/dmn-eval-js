@@ -33,6 +33,21 @@ const log = label => {
   return through.obj(log);
 };
 
+gulp.task('lint', () => {
+  return gulp.src(['**/*.js','!node_modules/**'])
+      .pipe(log('linting'))
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+});
+
+gulp.task('src:lint', ()=>{
+return gulp.src(['src/*.js'])
+      .pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+});
+
 gulp.task('initialize:feel', () => gulp.src('./grammar/feel-initializer.js')
 		.pipe(insert.transform((contents, file) => {
   let initializer_start = '{ \n',
@@ -41,44 +56,44 @@ gulp.task('initialize:feel', () => gulp.src('./grammar/feel-initializer.js')
 }))
 		.pipe(gulp.dest('./temp')));
 
-gulp.task('concat:feel', ['initialize:feel'], () => gulp.src(['./temp/feel-initializer.js', './grammar/feel.pegjs'])
+gulp.task('concat:feel', gulp.series('initialize:feel', () => gulp.src(['./temp/feel-initializer.js', './grammar/feel.pegjs'])
 		.pipe(concat('feel.pegjs'))
-		.pipe(gulp.dest('./src/')));
+		.pipe(gulp.dest('./src/'))));
 
 
-gulp.task('clean:temp', ['initialize:feel', 'concat:feel'], () => gulp.src('./temp', {
+gulp.task('clean:temp', gulp.series('initialize:feel', 'concat:feel', () => gulp.src('./temp', {
   read: false,
 })
-		.pipe(clean()));
+		.pipe(clean())));
 
-gulp.task('clean:dist:feel', ['src:lint'], () => gulp.src('./dist/feel.js', {
+gulp.task('clean:dist:feel', gulp.series('src:lint', () => gulp.src('./dist/feel.js', {
   read: false,
 })
-		.pipe(clean()));
+		.pipe(clean())));
 
-gulp.task('clean:dist:feel:ast', ['src:lint'], () => gulp.src('./dist/feel-ast*.js', {
+gulp.task('clean:dist:feel:ast', gulp.series('src:lint', () => gulp.src('./dist/feel-ast*.js', {
   read: false,
 })
-		.pipe(clean()));
+		.pipe(clean())));
 
 gulp.task('clean:src:feel', () => gulp.src('./src/feel.pegjs', {
   read: false,
 })
 		.pipe(clean()));
 
-gulp.task('generate:parser',['clean:dist:feel'], () => gulp.src('src/feel.pegjs')
+gulp.task('generate:parser',gulp.series('clean:dist:feel', () => gulp.src('src/feel.pegjs')
 		.pipe(peg({
   format: 'commonjs',
   cache: true,
   allowedStartRules: ["Start", "SimpleExpressions", "SimpleUnaryTests"]
 }))
-		.pipe(gulp.dest('./dist')));
+		.pipe(gulp.dest('./dist'))));
 
-gulp.task('dist:feel:ast', ['clean:dist:feel:ast'], () => gulp.src('src/feel-ast.js')
-		.pipe(gulp.dest('./dist')));
+gulp.task('dist:feel:ast', gulp.series('clean:dist:feel:ast', () => gulp.src('src/feel-ast.js')
+		.pipe(gulp.dest('./dist'))));
 
-gulp.task('dist:feel:ast:parser', ['clean:dist:feel:ast'], () => gulp.src('src/feel-ast-parser.js')
-		.pipe(gulp.dest('./dist')));
+gulp.task('dist:feel:ast:parser', gulp.series('clean:dist:feel:ast', () => gulp.src('src/feel-ast-parser.js')
+		.pipe(gulp.dest('./dist'))));
 
 
 gulp.task('mocha', () => gulp.src(['test/*.js'], {
@@ -89,21 +104,6 @@ gulp.task('mocha', () => gulp.src(['test/*.js'], {
 }))
 		.on('error', gutil.log));
 
-
-gulp.task('lint', () => {
-    return gulp.src(['**/*.js','!node_modules/**'])
-        .pipe(log('linting'))
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
-});
-
-gulp.task('src:lint', ()=>{
-  return gulp.src(['src/*.js'])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
-});
 
 gulp.task('utils:lint', ()=>{
   return gulp.src(['utils/*.js'])
@@ -118,7 +118,7 @@ gulp.task('pre-test-ci', function () {
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test-ci', ['pre-test-ci'], function () {
+gulp.task('test-ci', gulp.series('pre-test-ci', function () {
   return gulp.src(['test/**/*.spec.js'])
     .pipe(mocha())
     .pipe(istanbul.writeReports({
@@ -127,9 +127,9 @@ gulp.task('test-ci', ['pre-test-ci'], function () {
       reportOpts: { dir: './coverage' }
     }))
     .pipe(istanbul.enforceThresholds({ thresholds:{ global: {statements: 85, branches: 70, lines: 85, functions: 90 }} }));
-});
+}));
 
-gulp.task('test-ci-html', ['pre-test-ci'], function () {
+gulp.task('test-ci-html', gulp.series('pre-test-ci', function () {
   return gulp.src(['test/**/*.spec.js'])
     .pipe(mocha())
     .pipe(istanbul.writeReports({
@@ -138,13 +138,13 @@ gulp.task('test-ci-html', ['pre-test-ci'], function () {
       reportOpts: { dir: './coverage' }
     }))
     .pipe(istanbul.enforceThresholds({ thresholds:{ global: {statements: 85, branches: 70, lines: 85, functions: 90 }} }));
-});
+}));
 
-gulp.task('build', ['initialize:feel', 'clean:src:feel', 'concat:feel', 'clean:temp']);
+gulp.task('build', gulp.series('initialize:feel', 'clean:src:feel', 'concat:feel', 'clean:temp'));
 
-gulp.task('generate', ['generate:parser']);
+gulp.task('generate', gulp.series('generate:parser'));
 
-gulp.task('default', ['build', 'generate', 'mocha']);
+gulp.task('default', gulp.series('build', 'generate', 'mocha'));
 
 gulp.task('watch', () => {
   gulp.watch('./grammar/*', ['build']);

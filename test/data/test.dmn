@@ -1,88 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h6tkfz" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decisionPrimary" name="Primary decision">
-    <extensionElements>
-      <biodi:bounds x="200" y="200" width="180" height="80" />
-      <biodi:edge source="decisionDependent">
-        <biodi:waypoints x="297" y="368" />
-        <biodi:waypoints x="321" y="280" />
-      </biodi:edge>
-    </extensionElements>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_1p6ew15">
       <requiredDecision href="#decisionDependent" />
     </informationRequirement>
     <decisionTable id="decisionTable" hitPolicy="FIRST">
       <input id="input1" label="Test date" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="date">        <text>date(input.testDate)</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="date">
+          <text>date(input.testDate)</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Score" name="output.score" typeRef="integer" />
       <rule id="row-503089363-5">
-        <inputEntry id="UnaryTests_0d1r8xq">        <text>[periodBegin .. periodBegin + periodDuration]</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1468hty">        <text>100</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0d1r8xq">
+          <text>[periodBegin .. periodBegin + periodDuration]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1468hty">
+          <text>100</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-6">
-        <inputEntry id="UnaryTests_0rwjaql">        <text><![CDATA[<= periodBegin]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1vs5wi6">        <text>50</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0rwjaql">
+          <text>&lt;= periodBegin</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1vs5wi6">
+          <text>50</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-7">
-        <inputEntry id="UnaryTests_12akixl">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_06kgyln">        <text>0</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_12akixl">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06kgyln">
+          <text>0</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>
   <decision id="decisionDependent" name="Dependent decision">
-    <extensionElements>
-      <biodi:bounds x="196" y="368" width="180" height="80" />
-    </extensionElements>
     <decisionTable id="DecisionTable_0cv7ee8" hitPolicy="FIRST">
       <input id="InputClause_0wmx9nf" label="Category" camunda:inputVariable="">
-        <inputExpression id="LiteralExpression_0iwz57q" typeRef="string">        <text>input.category</text>
-</inputExpression>
+        <inputExpression id="LiteralExpression_0iwz57q" typeRef="string">
+          <text>input.category</text>
+        </inputExpression>
       </input>
       <output id="OutputClause_0cxgzjj" label="Begin of Period" name="periodBegin" typeRef="date" />
       <output id="OutputClause_10wkfgy" label="Duration of Period" name="periodDuration" typeRef="date" />
       <rule id="row-503089363-1">
         <description></description>
-        <inputEntry id="UnaryTests_0rt9g4i">        <text><![CDATA["A", "B"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1ynxoo9">        <text>date(input.referenceDate)</text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0pdkdse">        <text><![CDATA[duration("P1M")]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0rt9g4i">
+          <text>"A", "B"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ynxoo9">
+          <text>date(input.referenceDate)</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0pdkdse">
+          <text>duration("P1M")</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-2">
         <description></description>
-        <inputEntry id="UnaryTests_08ybgpx">        <text><![CDATA["C"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0qf7g0r">        <text>date(input.referenceDate)</text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_1002v8u">        <text><![CDATA[duration("P2M")]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_08ybgpx">
+          <text>"C"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qf7g0r">
+          <text>date(input.referenceDate)</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1002v8u">
+          <text>duration("P2M")</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-3">
         <description></description>
-        <inputEntry id="UnaryTests_06zj57i">        <text><![CDATA[not("C", "D")]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0ygzepj">        <text>date(input.referenceDate)</text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0n0wj3y">        <text><![CDATA[duration("P3M")]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_06zj57i">
+          <text>not("C", "D")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ygzepj">
+          <text>date(input.referenceDate)</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0n0wj3y">
+          <text>duration("P3M")</text>
+        </outputEntry>
       </rule>
       <rule id="row-503089363-4">
-        <inputEntry id="UnaryTests_1w1dgo0">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1w58vcr">        <text>date(input.referenceDate)</text>
-</outputEntry>
-        <outputEntry id="LiteralExpression_0wzpjef">        <text><![CDATA[duration("P4M")]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_1w1dgo0">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1w58vcr">
+          <text>date(input.referenceDate)</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0wzpjef">
+          <text>duration("P4M")</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1pp0w15">
+      <dmndi:DMNShape id="DMNShape_0aizzcg" dmnElementRef="decisionPrimary">
+        <dc:Bounds height="80" width="180" x="200" y="200" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_18akpws" dmnElementRef="InformationRequirement_1p6ew15">
+        <di:waypoint x="297" y="368" />
+        <di:waypoint x="321" y="280" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0ysy4f7" dmnElementRef="decisionDependent">
+        <dc:Bounds height="80" width="180" x="196" y="368" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
 </definitions>

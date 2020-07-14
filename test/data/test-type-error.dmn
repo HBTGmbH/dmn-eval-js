@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="dinnerDecisions" name="Dinner Decisions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="dinnerDecisions" name="Dinner Decisions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="beverages" name="Beverages">
-    <extensionElements>
-      <biodi:bounds x="462" y="16" width="180" height="80" />
-      <biodi:edge source="Decision_0v6lvdk">
-        <biodi:waypoints x="104" y="338" />
-        <biodi:waypoints x="163" y="264" />
-      </biodi:edge>
-      <biodi:edge source="InputData_0pgvdj9">
-        <biodi:waypoints x="642" y="169" />
-        <biodi:waypoints x="595" y="96" />
-      </biodi:edge>
-      <biodi:edge source="dish">
-        <biodi:waypoints x="454" y="170" />
-        <biodi:waypoints x="530" y="96" />
-      </biodi:edge>
-    </extensionElements>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_0qqto31">
       <requiredInput href="#InputData_0pgvdj9" />
     </informationRequirement>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_0idrpov">
       <requiredDecision href="#dish" />
     </informationRequirement>
-    <decisionTable hitPolicy="COLLECT">
+    <decisionTable id="DecisionTable_1qz5qwr" hitPolicy="COLLECT">
       <input id="InputClause_1acmlkd" label="Dish" camunda:inputVariable="">
         <inputExpression id="LiteralExpression_0bqgrlg" typeRef="string">
           <text>desiredDish</text>
@@ -104,28 +89,13 @@
     </decisionTable>
   </decision>
   <decision id="dish" name="Dish">
-    <extensionElements>
-      <biodi:bounds x="323" y="170" width="180" height="80" />
-      <biodi:edge source="KnowledgeSource_0b8hnqo">
-        <biodi:waypoints x="201" y="215" />
-        <biodi:waypoints x="323" y="208" />
-      </biodi:edge>
-      <biodi:edge source="InputData_0rin549">
-        <biodi:waypoints x="317" y="329" />
-        <biodi:waypoints x="377" y="250" />
-      </biodi:edge>
-      <biodi:edge source="InputData_1axnom3">
-        <biodi:waypoints x="506" y="331" />
-        <biodi:waypoints x="448" y="250" />
-      </biodi:edge>
-    </extensionElements>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_1yqvt25">
       <requiredInput href="#InputData_0rin549" />
     </informationRequirement>
-    <informationRequirement>
+    <informationRequirement id="InformationRequirement_06hkrww">
       <requiredInput href="#InputData_1axnom3" />
     </informationRequirement>
-    <authorityRequirement>
+    <authorityRequirement id="AuthorityRequirement_0s7bw8j">
       <requiredAuthority href="#KnowledgeSource_0b8hnqo" />
     </authorityRequirement>
     <decisionTable id="DecisionTable_040j91i">
@@ -223,24 +193,50 @@
       </rule>
     </decisionTable>
   </decision>
-  <inputData id="InputData_0rin549" name="Season">
-    <extensionElements>
-      <biodi:bounds x="236" y="329" width="125" height="45" />
-    </extensionElements>
-  </inputData>
-  <inputData id="InputData_1axnom3" name="Number of Guests">
-    <extensionElements>
-      <biodi:bounds x="459" y="331" width="125" height="45" />
-    </extensionElements>
-  </inputData>
-  <inputData id="InputData_0pgvdj9" name="Guests with children?">
-    <extensionElements>
-      <biodi:bounds x="590" y="169" width="125" height="45" />
-    </extensionElements>
-  </inputData>
-  <knowledgeSource id="KnowledgeSource_0b8hnqo" name="Men&#39;s Cookbook">
-    <extensionElements>
-      <biodi:bounds x="101" y="183" width="100" height="63" />
-    </extensionElements>
-  </knowledgeSource>
+  <inputData id="InputData_0rin549" name="Season" />
+  <inputData id="InputData_1axnom3" name="Number of Guests" />
+  <inputData id="InputData_0pgvdj9" name="Guests with children?" />
+  <knowledgeSource id="KnowledgeSource_0b8hnqo" name="Men&#39;s Cookbook" />
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_0bo85xk">
+      <dmndi:DMNShape id="DMNShape_1jstqwp" dmnElementRef="beverages">
+        <dc:Bounds height="80" width="180" x="462" y="16" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1pobysz" dmnElementRef="InformationRequirement_0qqto31">
+        <di:waypoint x="642" y="169" />
+        <di:waypoint x="595" y="96" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1myuuyk" dmnElementRef="InformationRequirement_0idrpov">
+        <di:waypoint x="454" y="170" />
+        <di:waypoint x="530" y="96" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1215hzp" dmnElementRef="dish">
+        <dc:Bounds height="80" width="180" x="323" y="170" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1p4632i" dmnElementRef="AuthorityRequirement_0s7bw8j">
+        <di:waypoint x="201" y="215" />
+        <di:waypoint x="323" y="208" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0aj0mbf" dmnElementRef="InformationRequirement_1yqvt25">
+        <di:waypoint x="317" y="329" />
+        <di:waypoint x="377" y="250" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0rp1a9l" dmnElementRef="InformationRequirement_06hkrww">
+        <di:waypoint x="506" y="331" />
+        <di:waypoint x="448" y="250" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0r641kr" dmnElementRef="InputData_0rin549">
+        <dc:Bounds height="45" width="125" x="236" y="329" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0azlbuw" dmnElementRef="InputData_1axnom3">
+        <dc:Bounds height="45" width="125" x="459" y="331" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1fu66xt" dmnElementRef="InputData_0pgvdj9">
+        <dc:Bounds height="45" width="125" x="590" y="169" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_15j6ldd" dmnElementRef="KnowledgeSource_0b8hnqo">
+        <dc:Bounds height="63" width="100" x="101" y="183" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
 </definitions>

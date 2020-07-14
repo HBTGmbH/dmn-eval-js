@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decision" name="Decision">
     <decisionTable id="decisionTable" hitPolicy="FIRST">
       <input id="input1" label="Score" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="integer">        <text>input.score + 1</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="integer">
+          <text>input.score + 1</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Message" name="message" typeRef="string" />
       <rule id="row-78874892-7">
-        <inputEntry id="UnaryTests_0ifbg5n">        <text>1</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_04qe1vc">        <text><![CDATA["Score 1"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ifbg5n">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04qe1vc">
+          <text>"Score 1"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-8">
-        <inputEntry id="UnaryTests_0uaae58">        <text>2</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1gxrcfo">        <text><![CDATA["Score 2"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0uaae58">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gxrcfo">
+          <text>"Score 2"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-9">
         <description></description>
-        <inputEntry id="UnaryTests_0zuogkd">        <text>3</text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0k52ex3">        <text><![CDATA["Score 3"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0zuogkd">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0k52ex3">
+          <text>"Score 3"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-10">
-        <inputEntry id="UnaryTests_0ap5wzj">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1j5lgsv">        <text><![CDATA["other score"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ap5wzj">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1j5lgsv">
+          <text>"other score"</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>

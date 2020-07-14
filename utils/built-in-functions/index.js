@@ -11,4 +11,6 @@ const boolean = require('./boolean-functions');
 const defined = require('./defined');
 const string = require('./string-functions');
 
-module.exports = Object.assign({}, dateTime, list, boolean, defined, string);
+module.exports = {
+  ...dateTime, ...list, ...boolean, ...defined, ...string,
+};

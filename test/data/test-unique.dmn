@@ -1,35 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decision" name="Decision">
     <decisionTable id="decisionTable">
       <input id="input1" label="Category" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="string">        <text>input.category</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="string">
+          <text>input.category</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Message" name="message" typeRef="string" />
       <rule id="row-78874892-7">
-        <inputEntry id="UnaryTests_0ifbg5n">        <text><![CDATA["A"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_04qe1vc">        <text><![CDATA["Message 1"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ifbg5n">
+          <text>"A"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04qe1vc">
+          <text>"Message 1"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-8">
-        <inputEntry id="UnaryTests_0uaae58">        <text><![CDATA["B"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1gxrcfo">        <text><![CDATA["Message 2"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0uaae58">
+          <text>"B"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gxrcfo">
+          <text>"Message 2"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-9">
-        <inputEntry id="UnaryTests_0zuogkd">        <text><![CDATA["A", "C"]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0k52ex3">        <text><![CDATA["Message 1"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0zuogkd">
+          <text>"A", "C"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0k52ex3">
+          <text>"Message 1"</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-10">
-        <inputEntry id="UnaryTests_0ap5wzj">        <text><![CDATA[not("B")]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1j5lgsv">        <text><![CDATA["Message 1"]]></text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ap5wzj">
+          <text>not("B")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1j5lgsv">
+          <text>"Message 1"</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>

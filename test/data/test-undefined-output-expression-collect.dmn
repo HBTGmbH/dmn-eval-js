@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_12heylh" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decision" name="Decision">
     <decisionTable id="decisionTable" hitPolicy="COLLECT">
       <input id="input1" label="Score" camunda:inputVariable="">
-        <inputExpression id="inputExpression1" typeRef="integer">        <text>input.score</text>
-</inputExpression>
+        <inputExpression id="inputExpression1" typeRef="integer">
+          <text>input.score</text>
+        </inputExpression>
       </input>
       <output id="output1" label="Category" name="output.categories" typeRef="string" />
       <rule id="row-78874892-7">
-        <inputEntry id="UnaryTests_0ifbg5n">        <text><![CDATA[> 1]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_04qe1vc">        <text>input.category1</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ifbg5n">
+          <text>&gt; 1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04qe1vc">
+          <text>input.category1</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-8">
-        <inputEntry id="UnaryTests_0uaae58">        <text><![CDATA[> 2]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1gxrcfo">        <text>input.category2</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0uaae58">
+          <text>&gt; 2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gxrcfo">
+          <text>input.category2</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-9">
         <description></description>
-        <inputEntry id="UnaryTests_0zuogkd">        <text><![CDATA[> 3]]></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_0k52ex3">        <text>input.category3</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0zuogkd">
+          <text>&gt; 3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0k52ex3">
+          <text>input.category3</text>
+        </outputEntry>
       </rule>
       <rule id="row-78874892-10">
-        <inputEntry id="UnaryTests_0ap5wzj">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1j5lgsv">        <text>input.otherCategory</text>
-</outputEntry>
+        <inputEntry id="UnaryTests_0ap5wzj">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1j5lgsv">
+          <text>input.otherCategory</text>
+        </outputEntry>
       </rule>
     </decisionTable>
   </decision>

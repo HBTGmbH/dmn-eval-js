@@ -4,8 +4,8 @@
 */
 const DmnModdle = require('dmn-moddle');
 const logger = require('loglevel').getLogger('dmn-eval-js');
-const feel = require('../../dist/feel');
 const moment = require('moment');
+const feel = require('../../dist/feel');
 
 function createModdle(additionalPackages, options) {
   return new DmnModdle(additionalPackages, options);
@@ -16,10 +16,12 @@ function readDmnXml(xml, opts, callback) {
 }
 
 function parseRule(rule, idx) {
-  const parsedRule = { number: idx + 1, input: [], inputValues: [], output: [], outputValues: [] };
+  const parsedRule = {
+    number: idx + 1, input: [], inputValues: [], output: [], outputValues: [],
+  };
   if (rule.inputEntry) {
     rule.inputEntry.forEach((inputEntry) => {
-      let text = inputEntry.text;
+      let { text } = inputEntry;
       if (text === '') {
         text = '-';
       }
@@ -51,25 +53,27 @@ function parseRule(rule, idx) {
   return parsedRule;
 }
 
-function parseDecisionTable(decisionId, decisionTable) {
-  if ((decisionTable.hitPolicy !== 'FIRST') && (decisionTable.hitPolicy !== 'UNIQUE')
-      && (decisionTable.hitPolicy !== 'COLLECT') && (decisionTable.hitPolicy !== 'RULE ORDER')) {
-    throw new Error(`Unsupported hit policy ${decisionTable.hitPolicy}`);
+function parseDecisionLogic(decisionId, decisionLogic) {
+  if ((decisionLogic.hitPolicy !== 'FIRST') && (decisionLogic.hitPolicy !== 'UNIQUE')
+      && (decisionLogic.hitPolicy !== 'COLLECT') && (decisionLogic.hitPolicy !== 'RULE ORDER')) {
+    throw new Error(`Unsupported hit policy ${decisionLogic.hitPolicy}`);
   }
-  const parsedDecisionTable = { hitPolicy: decisionTable.hitPolicy, rules: [], inputExpressions: [], parsedInputExpressions: [], outputNames: [] };
+  const parseddecisionLogic = {
+    hitPolicy: decisionLogic.hitPolicy, rules: [], inputExpressions: [], parsedInputExpressions: [], outputNames: [],
+  };
 
   // parse rules (there may be none, though)
-  if (decisionTable.rule === undefined) {
+  if (decisionLogic.rule === undefined) {
     logger.warn(`The decision table for decision '${decisionId}' contains no rules.`);
   } else {
-    decisionTable.rule.forEach((rule, idx) => {
-      parsedDecisionTable.rules.push(parseRule(rule, idx));
+    decisionLogic.rule.forEach((rule, idx) => {
+      parseddecisionLogic.rules.push(parseRule(rule, idx));
     });
   }
 
   // parse input expressions
-  if (decisionTable.input) {
-    decisionTable.input.forEach((input) => {
+  if (decisionLogic.input) {
+    decisionLogic.input.forEach((input) => {
       let inputExpression;
       if (input.inputExpression && input.inputExpression.text) {
         inputExpression = input.inputExpression.text;
@@ -78,9 +82,9 @@ function parseDecisionTable(decisionId, decisionTable) {
       } else {
         throw new Error(`No input variable or expression set for input '${input.id}'`);
       }
-      parsedDecisionTable.inputExpressions.push(inputExpression);
+      parseddecisionLogic.inputExpressions.push(inputExpression);
       try {
-        parsedDecisionTable.parsedInputExpressions.push(feel.parse(inputExpression, {
+        parseddecisionLogic.parsedInputExpressions.push(feel.parse(inputExpression, {
           startRule: 'SimpleExpressions',
         }));
       } catch (err) {
@@ -90,23 +94,23 @@ function parseDecisionTable(decisionId, decisionTable) {
   }
 
   // parse output names
-  decisionTable.output.forEach((output) => {
+  decisionLogic.output.forEach((output) => {
     if (output.name) {
-      parsedDecisionTable.outputNames.push(output.name);
+      parseddecisionLogic.outputNames.push(output.name);
     } else {
       throw new Error(`No name set for output "${output.id}"`);
     }
   });
-  return parsedDecisionTable;
+  return parseddecisionLogic;
 }
 
 function parseDecisions(drgElements) {
   const parsedDecisions = [];
   // iterate over all decisions in the DMN
   drgElements.forEach((drgElement) => {
-    if (drgElement.decisionTable) {
+    if (drgElement.decisionLogic) {
       // parse the decision table...
-      const decision = { decisionTable: parseDecisionTable(drgElement.id, drgElement.decisionTable), requiredDecisions: [] };
+      const decision = { decisionLogic: parseDecisionLogic(drgElement.id, drgElement.decisionLogic), requiredDecisions: [] };
       // ...and collect the decisions on which the current decision depends
       if (drgElement.informationRequirement !== undefined) {
         drgElement.informationRequirement.forEach((req) => {
@@ -129,7 +133,7 @@ function parseDmnXml(xml, opts) {
         reject(err);
       } else {
         try {
-          const decisions = parseDecisions(dmnContent.drgElements);
+          const decisions = parseDecisions(dmnContent.drgElement);
           resolve(decisions);
         } catch (err) {
           reject(err);
@@ -177,7 +181,7 @@ function setOrAddValue(expression, obj, value) {
 function mergeContext(context, additionalContent, aggregate = false) {
   if (Array.isArray(additionalContent)) {
     // additional content is the result of evaluation a rule table with multiple rule results
-    additionalContent.forEach(ruleResult => mergeContext(context, ruleResult, true));
+    additionalContent.forEach((ruleResult) => mergeContext(context, ruleResult, true));
   } else {
     // additional content is the result of evaluation a rule table with a single rule result
     for (const prop in additionalContent) { // eslint-disable-line no-restricted-syntax
@@ -208,8 +212,8 @@ function mergeContext(context, additionalContent, aggregate = false) {
 function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
   for (let i = 0; i < rule.input.length; i += 1) {
     try {
-      const inputVariableName = resolvedInputExpressions[i].inputVariableName;
-      const inputFunction = rule.input[i].build(Object.assign({ _inputVariableName: inputVariableName }, context)); // eslint-disable-line no-await-in-loop
+      const { inputVariableName } = resolvedInputExpressions[i];
+      const inputFunction = rule.input[i].build({ _inputVariableName: inputVariableName, ...context }); // eslint-disable-line no-await-in-loop
       if (!inputFunction(resolvedInputExpressions[i].value)) {
         return {
           matched: false,
@@ -254,19 +258,19 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
   }
   logger.info(`Evaluating decision "${decisionId}"...`);
   logger.debug(`Context: ${JSON.stringify(context)}`);
-  const decisionTable = decision.decisionTable;
+  const { decisionLogic } = decision;
 
   // resolve input expressions
   const resolvedInputExpressions = [];
-  for (let i = 0; i < decisionTable.parsedInputExpressions.length; i += 1) {
-    const parsedInputExpression = decisionTable.parsedInputExpressions[i];
-    const plainInputExpression = decisionTable.inputExpressions[i];
+  for (let i = 0; i < decisionLogic.parsedInputExpressions.length; i += 1) {
+    const parsedInputExpression = decisionLogic.parsedInputExpressions[i];
+    const plainInputExpression = decisionLogic.inputExpressions[i];
     try {
       const resolvedInputExpression = parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
       // check if the input expression is to be treated as an input variable - this is the case if it is a qualified name
       let inputVariableName;
       if (parsedInputExpression.simpleExpressions && parsedInputExpression.simpleExpressions[0].type === 'QualifiedName') {
-        inputVariableName = parsedInputExpression.simpleExpressions[0].names.map(nameNode => nameNode.nameChars).join('.');
+        inputVariableName = parsedInputExpression.simpleExpressions[0].names.map((nameNode) => nameNode.nameChars).join('.');
       }
       resolvedInputExpressions.push({ value: resolvedInputExpression[0], inputVariableName });
     } catch (err) {
@@ -275,9 +279,9 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
   }
 
   // initialize the result to an object with undefined output values (hit policy FIRST or UNIQUE) or to an empty array (hit policy COLLECT or RULE ORDER)
-  const decisionResult = (decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE') ? {} : [];
-  decisionTable.outputNames.forEach((outputName) => {
-    if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
+  const decisionResult = (decisionLogic.hitPolicy === 'FIRST') || (decisionLogic.hitPolicy === 'UNIQUE') ? {} : [];
+  decisionLogic.outputNames.forEach((outputName) => {
+    if ((decisionLogic.hitPolicy === 'FIRST') || (decisionLogic.hitPolicy === 'UNIQUE')) {
       setOrAddValue(outputName, decisionResult, undefined);
     }
   });
@@ -286,31 +290,31 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
   // and either return the output of the first matching rule (hit policy FIRST)
   // or collect the output of all matching rules (hit policy COLLECT)
   let hasMatch = false;
-  for (let i = 0; i < decisionTable.rules.length; i += 1) {
-    const rule = decisionTable.rules[i];
+  for (let i = 0; i < decisionLogic.rules.length; i += 1) {
+    const rule = decisionLogic.rules[i];
     let ruleResult;
     try {
-      ruleResult = evaluateRule(rule, resolvedInputExpressions, decisionTable.outputNames, context); // eslint-disable-line no-await-in-loop
+      ruleResult = evaluateRule(rule, resolvedInputExpressions, decisionLogic.outputNames, context); // eslint-disable-line no-await-in-loop
     } catch (err) {
       throw new Error(`Failed to evaluate rule ${rule.number} of decision ${decisionId}:  ${err}`);
     }
     if (ruleResult.matched) {
       // only one match for hit policy UNIQUE!
-      if (hasMatch && (decisionTable.hitPolicy === 'UNIQUE')) {
+      if (hasMatch && (decisionLogic.hitPolicy === 'UNIQUE')) {
         throw new Error(`Decision "${decisionId}" is not unique but hit policy is UNIQUE.`);
       }
       hasMatch = true;
       logger.info(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)} (rule ${i + 1} matched)`);
 
       // merge the result of the matched rule
-      if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
-        decisionTable.outputNames.forEach((outputName) => {
+      if ((decisionLogic.hitPolicy === 'FIRST') || (decisionLogic.hitPolicy === 'UNIQUE')) {
+        decisionLogic.outputNames.forEach((outputName) => {
           const resolvedOutput = resolveExpression(outputName, ruleResult.output);
-          if (resolvedOutput !== undefined || decisionTable.hitPolicy === 'FIRST' || decisionTable.hitPolicy === 'UNIQUE') {
+          if (resolvedOutput !== undefined || decisionLogic.hitPolicy === 'FIRST' || decisionLogic.hitPolicy === 'UNIQUE') {
             setOrAddValue(outputName, decisionResult, resolvedOutput);
           }
         });
-        if (decisionTable.hitPolicy === 'FIRST') {
+        if (decisionLogic.hitPolicy === 'FIRST') {
           // no more rule results in this case
           break;
         }
@@ -319,7 +323,7 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
       }
     }
   }
-  if (!hasMatch && decisionTable.rules.length > 0) {
+  if (!hasMatch && decisionLogic.rules.length > 0) {
     logger.warn(`No rule matched for decision "${decisionId}".`);
   }
   return decisionResult;
@@ -352,7 +356,7 @@ function dumpTree(node, indent) {
       dumpTree(node.params, newIndent);
       break;
     }
-    case 'DateTimeLiteral': node.params.forEach(p => dumpTree(p, newIndent)); break;
+    case 'DateTimeLiteral': node.params.forEach((p) => dumpTree(p, newIndent)); break;
     case 'Interval': {
       dumpTree(node.startpoint, newIndent);
       dumpTree(node.endpoint, newIndent);
@@ -361,14 +365,16 @@ function dumpTree(node, indent) {
     case 'Literal': logger.debug(`${newIndent}"${node.value}"`); break;
     case 'Name': logger.debug(`${newIndent}"${node.nameChars}"`); break;
     case 'Program': dumpTree(node.body, newIndent); break;
-    case 'PositionalParameters': node.params.forEach(p => dumpTree(p, newIndent)); break;
-    case 'QualifiedName': node.names.forEach(n => dumpTree(n, newIndent)); break;
-    case 'SimpleExpressions': node.simpleExpressions.forEach(s => dumpTree(s, newIndent)); break;
+    case 'PositionalParameters': node.params.forEach((p) => dumpTree(p, newIndent)); break;
+    case 'QualifiedName': node.names.forEach((n) => dumpTree(n, newIndent)); break;
+    case 'SimpleExpressions': node.simpleExpressions.forEach((s) => dumpTree(s, newIndent)); break;
     case 'SimplePositiveUnaryTest': dumpTree(node.operand, newIndent); break;
-    case 'SimpleUnaryTestsNode': node.expr.forEach(e => dumpTree(e, newIndent)); break;
-    case 'UnaryTestsNode': node.expr.forEach(e => dumpTree(e, newIndent)); break;
+    case 'SimpleUnaryTestsNode': node.expr.forEach((e) => dumpTree(e, newIndent)); break;
+    case 'UnaryTestsNode': node.expr.forEach((e) => dumpTree(e, newIndent)); break;
     default: logger.debug('?');
   }
 }
 
-module.exports = { readDmnXml, parseDmnXml, parseDecisions, evaluateDecision, dumpTree };
+module.exports = {
+  readDmnXml, parseDmnXml, parseDecisions, evaluateDecision, dumpTree,
+};
